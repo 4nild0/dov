@@ -1,22 +1,22 @@
 version: "3.8"
 
 services:
-  php:
+  app:
     build:
       context: .
-    container_name: php
+    container_name: app
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
     depends_on:
-      - mysql
+      - db
     environment:
       DB_CONNECTION: mysql
-      DB_HOST: mysql
+      DB_HOST: db
       DB_PORT: 3306
       DB_DATABASE: dov
-      DB_USERNAME: dov-user
-      DB_PASSWORD: dovpass
+      DB_USERNAME: teste
+      DB_PASSWORD: 123456
     command: >
       sh -c "composer install &&
              php artisan key:generate &&
@@ -25,14 +25,14 @@ services:
              chmod -R 775 storage bootstrap/cache &&
              php-fpm"
 
-  mysql:
+  db:
     image: mysql:8
-    container_name: mysql
+    container_name: db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: dov
-      MYSQL_USER: dov-user
-      MYSQL_PASSWORD: dovpass
+      MYSQL_USER: teste
+      MYSQL_PASSWORD: 123456
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - dbdata:/var/lib/mysql
@@ -48,8 +48,7 @@ services:
       - ./src:/var/www/html
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - php
-    
+      - app
+
 volumes:
   dbdata:
-        
