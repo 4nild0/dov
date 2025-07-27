@@ -19,8 +19,9 @@ services:
       DB_USERNAME: teste
       DB_PASSWORD: 123456
     command: >
-      sh -c "if [ ! -f .env ]; then cp .env.example .env; fi &&
-             composer install &&
+      sh -c "composer install &&
+             npm install &&
+             npm run build &&
              php artisan key:generate &&
              php artisan migrate --force &&
              chown -R www-data:www-data storage bootstrap/cache &&
