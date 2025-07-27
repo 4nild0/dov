@@ -7,7 +7,6 @@ services:
     container_name: app
     volumes:
       - ./src:/var/www/html
-      - ./.env.example:/var/www/html/.env        # ✅ monta o .env da raiz no container
     working_dir: /var/www/html
     depends_on:
       db:
