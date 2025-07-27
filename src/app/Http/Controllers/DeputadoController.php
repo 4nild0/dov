@@ -13,7 +13,7 @@ class DeputadoController extends Controller
      */
     public function index()
     {
-        //
+        return 'deputados';
     }
 
     /**
