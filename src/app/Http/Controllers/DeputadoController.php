@@ -86,7 +86,7 @@ class DeputadoController extends Controller
             ]);
         }
 
-        ImportarDeputadoJob::dispatchSync($resultado['id']);
+        ImportarDeputadoJob::dispatch($resultado['id']);
 
         // Despesas da API, ordenadas da mais recente para mais antiga
         $respostaDespesas = Http::get("https://dadosabertos.camara.leg.br/api/v2/deputados/{$resultado['id']}/despesas");

@@ -18,7 +18,7 @@ services:
       DB_DATABASE: dov
       DB_USERNAME: teste
       DB_PASSWORD: 123456
-    
+      QUEUE_CONNECTION: database
     command: >
       sh -c "
       if [ ! -f .env ]; then
@@ -34,7 +34,33 @@ services:
       php-fpm
       "
 
-
+  worker:
+    build:
+      context: .
+    container_name: worker
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: dov
+      DB_USERNAME: teste
+      DB_PASSWORD: 123456
+      QUEUE_CONNECTION: database
+    command: >
+      sh -c "
+      if [ ! -f .env ]; then
+      cp .env.example .env;
+      fi &&
+      composer install &&
+      php artisan migrate --force &&
+      php artisan queue:work
+      "
 
   db:
     image: mysql:8
